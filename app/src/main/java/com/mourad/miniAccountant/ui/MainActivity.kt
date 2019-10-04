@@ -18,6 +18,7 @@ import com.mourad.miniAccountant.repository.JobRepository
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
 import kotlinx.android.synthetic.main.dialog_add_job.*
+import kotlinx.android.synthetic.main.dialog_add_job.view.*
 import kotlinx.coroutines.*
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -56,14 +57,22 @@ class MainActivity : AppCompatActivity() {
         dialog.clDialog2.visibility = View.INVISIBLE
         dialog.clDialog3.visibility = View.INVISIBLE
 
+        dialog.etYear.minValue = 2000
+        dialog.etYear.maxValue = 2019
+
+        dialog.etMonth.minValue = 1
+        dialog.etMonth.maxValue = 12
+
+        dialog.etDay.minValue = 1
+        dialog.etDay.maxValue = 31
 
         var today = Calendar.getInstance()
-        dialog.etYear.setText(SimpleDateFormat("yyyy").format(today.time))
-        dialog.etMonth.setText(SimpleDateFormat("MM").format(today.time))
-        dialog.etDay.setText(SimpleDateFormat("dd").format(today.time))
+        dialog.etYear.value = SimpleDateFormat("yyyy").format(today.time).toInt()
+        dialog.etMonth.value = SimpleDateFormat("MM").format(today.time).toInt()
+        dialog.etDay.value = SimpleDateFormat("dd").format(today.time).toInt()
 
         dialog.btnNext.setOnClickListener {
-            if (validateDate(dialog.etYear, dialog.etMonth, dialog.etDay)) {
+            if (validateDate(dialog.etYear.value, dialog.etMonth.value, dialog.etDay.value)) {
                 dialog.clDialog2.visibility = View.VISIBLE
             }
         }
@@ -107,15 +116,17 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun validateDate(year: EditText, month: EditText, day: EditText): Boolean {
-        return if (year.text.toString().isNotBlank() &&
-            month.text.toString().isNotBlank() &&
-            day.text.toString().isNotBlank()) {
-            true
-        } else {
-            Toast.makeText(this, R.string.error_empty_fields, Toast.LENGTH_LONG).show()
-            false
-        }
+    // todo schrijf heir iets boeiends wat empty bestaat niet meer
+    private fun validateDate(year: Int, month: Int, day: Int): Boolean {
+//        return if (year.text.toString().isNotBlank() &&
+////            month.text.toString().isNotBlank() &&
+////            day.text.toString().isNotBlank()) {
+////            true
+////        } else {
+////            Toast.makeText(this, R.string.error_empty_fields, Toast.LENGTH_LONG).show()
+////            false
+////        }
+        return true
     }
 
     private fun validateTime(hours: EditText, minutes: EditText): Boolean {
@@ -130,37 +141,30 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun addJob(dialog: Dialog) {
+        mainScope.launch {
+            var startDate = Calendar.getInstance()
+            startDate.set(
+                dialog.etYear.value,
+                dialog.etMonth.value - 1,
+                dialog.etDay.value,
+                dialog.etStartHours.text.toString().toInt(),
+                dialog.etStartMinutes.text.toString().toInt()
+            )
+            var endDate = Calendar.getInstance()
+            endDate.set(
+                dialog.etYear.value,
+                dialog.etMonth.value - 1,
+                dialog.etDay.value,
+                dialog.etEndHours.text.toString().toInt(),
+                dialog.etEndMinutes.text.toString().toInt()
+            )
 
-        if (validateDate(dialog.etYear, dialog.etMonth, dialog.etDay)) {
-            if (validateTime(dialog.etStartHours, dialog.etStartMinutes) && validateTime(dialog.etEndHours, dialog.etEndMinutes)) {
-
-                mainScope.launch {
-                    var startDate = Calendar.getInstance()
-                    startDate.set(
-                        dialog.etYear.text.toString().toInt(),
-                        dialog.etMonth.text.toString().toInt() - 1,
-                        dialog.etDay.text.toString().toInt(),
-                        dialog.etStartHours.text.toString().toInt(),
-                        dialog.etStartMinutes.text.toString().toInt()
-                    )
-                    var endDate = Calendar.getInstance()
-                    endDate.set(
-                        dialog.etYear.text.toString().toInt(),
-                        dialog.etMonth.text.toString().toInt() - 1,
-                        dialog.etDay.text.toString().toInt(),
-                        dialog.etEndHours.text.toString().toInt(),
-                        dialog.etEndMinutes.text.toString().toInt()
-                    )
-
-                    val job = Job(startDate, endDate, false)
-                    withContext(Dispatchers.IO) {
-                        jobRepository.insertJob(job)
-                    }
-                    getJobsFromDatabase()
-                    dialog.cancel()
-                }
-
+            val job = Job(startDate, endDate, false)
+            withContext(Dispatchers.IO) {
+                jobRepository.insertJob(job)
             }
+            getJobsFromDatabase()
+            dialog.cancel()
         }
     }
 

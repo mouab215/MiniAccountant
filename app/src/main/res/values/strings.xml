@@ -7,9 +7,9 @@
     <string name="dialog_title">Add a new Job</string>
     <string name="dialog_date">On what date did you work?</string>
     <string name="dialog_start_time">At what time did you start?</string>
-    <string name="dialog_year">Yyyy</string>
-    <string name="dialog_month">MM</string>
-    <string name="dialog_day">Dd</string>
+    <string name="dialog_year">Year</string>
+    <string name="dialog_month">Month</string>
+    <string name="dialog_day">Day</string>
     <string name="dialog_hours">Hh</string>
     <string name="dialog_minutes">Mm</string>
     <string name="dialog_time_divide">:</string>
