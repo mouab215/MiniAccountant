@@ -5,8 +5,8 @@
     <string name="main_earned">Earned</string>
 
     <string name="dialog_title">Add a new Job</string>
-    <string name="dialog_date">Date</string>
-    <string name="dialog_start_time">Start time</string>
+    <string name="dialog_date">On what date did you work?</string>
+    <string name="dialog_start_time">At what time did you start?</string>
     <string name="dialog_year">Yyyy</string>
     <string name="dialog_month">MM</string>
     <string name="dialog_day">Dd</string>
@@ -14,8 +14,9 @@
     <string name="dialog_minutes">Mm</string>
     <string name="dialog_time_divide">:</string>
     <string name="dialog_date_divide">-</string>
-    <string name="dialog_end_time">End time</string>
+    <string name="dialog_end_time">At what time did you end?</string>
     <string name="dialog_save_button">Add</string>
+    <string name="dialog_next_button">Next</string>
 
     <string name="error_empty_fields">Please fill in all the fields!</string>
 

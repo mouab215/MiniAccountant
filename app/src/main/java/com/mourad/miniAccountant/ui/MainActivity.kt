@@ -4,6 +4,7 @@ import android.app.Dialog
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.view.View
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -43,20 +44,40 @@ class MainActivity : AppCompatActivity() {
         createItemTouchHelper().attachToRecyclerView(rvJobs)
         getJobsFromDatabase()
 
-        fab.setOnClickListener { buildDialogTransferQuestion() }
+        fab.setOnClickListener { buildDialogAddJobDate() }
     }
 
-    private fun buildDialogTransferQuestion() {
+    private fun buildDialogAddJobDate() {
         var dialog = Dialog(this@MainActivity)
         dialog.setContentView(R.layout.dialog_add_job)
         dialog.window.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-        dialog.btnAdd.setOnClickListener { AddJob(dialog) }
+//        dialog.btnAdd.setOnClickListener { AddJob(dialog) }
+
+        dialog.clDialog2.visibility = View.INVISIBLE
+        dialog.clDialog3.visibility = View.INVISIBLE
+
 
         var today = Calendar.getInstance()
         dialog.etYear.setText(SimpleDateFormat("yyyy").format(today.time))
         dialog.etMonth.setText(SimpleDateFormat("MM").format(today.time))
         dialog.etDay.setText(SimpleDateFormat("dd").format(today.time))
 
+        dialog.btnNext.setOnClickListener {
+            if (validateDate(dialog.etYear, dialog.etMonth, dialog.etDay)) {
+                dialog.clDialog2.visibility = View.VISIBLE
+            }
+        }
+        dialog.btnNext2.setOnClickListener {
+            if (validateTime(dialog.etStartHours, dialog.etStartMinutes)) {
+                dialog.clDialog3.visibility = View.VISIBLE
+            }
+        }
+        dialog.btnAdd.setOnClickListener {
+            if (validateTime(dialog.etEndHours, dialog.etEndMinutes)) {
+                addJob(dialog)
+                dialog.cancel()
+            }
+        }
         dialog.show()
 
     }
@@ -108,7 +129,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun AddJob(dialog: Dialog) {
+    private fun addJob(dialog: Dialog) {
 
         if (validateDate(dialog.etYear, dialog.etMonth, dialog.etDay)) {
             if (validateTime(dialog.etStartHours, dialog.etStartMinutes) && validateTime(dialog.etEndHours, dialog.etEndMinutes)) {
