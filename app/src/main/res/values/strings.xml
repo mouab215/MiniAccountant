@@ -1,0 +1,24 @@
+<resources>
+    <string name="app_name">miniAccountant</string>
+
+    <string name="main_to_be_payed">To be paid</string>
+    <string name="main_earned">Earned</string>
+
+    <string name="dialog_title">Add a new Job</string>
+    <string name="dialog_date">Date</string>
+    <string name="dialog_start_time">Start time</string>
+    <string name="dialog_year">Yyyy</string>
+    <string name="dialog_month">MM</string>
+    <string name="dialog_day">Dd</string>
+    <string name="dialog_hours">Hh</string>
+    <string name="dialog_minutes">Mm</string>
+    <string name="dialog_time_divide">:</string>
+    <string name="dialog_date_divide">-</string>
+    <string name="dialog_end_time">End time</string>
+    <string name="dialog_save_button">Add</string>
+
+    <string name="error_empty_fields">Please fill in all the fields!</string>
+
+    <string name="job_total">Worked Hours</string>
+    <string name="money">€ %.2f</string>
+</resources>
