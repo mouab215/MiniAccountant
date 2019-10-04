@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">miniAccountant</string>
+    <string name="app_name">Mini Accountant</string>
 
     <string name="main_to_be_payed">To be paid</string>
     <string name="main_earned">Earned</string>

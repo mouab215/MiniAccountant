@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.mourad.miniAccountant.R
@@ -39,6 +40,7 @@ class MainActivity : AppCompatActivity() {
     fun initViews() {
         rvJobs.layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
         rvJobs.adapter = jobAdapter
+        createItemTouchHelper().attachToRecyclerView(rvJobs)
         getJobsFromDatabase()
 
         fab.setOnClickListener { buildDialogTransferQuestion() }
@@ -151,6 +153,37 @@ class MainActivity : AppCompatActivity() {
                 getJobsFromDatabase()
             }
         }
+    }
+
+    private fun createItemTouchHelper(): ItemTouchHelper {
+
+        // Callback which is used to create the ItemTouch helper. Only enables left swipe.
+        // Use ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) to also enable right swipe.
+        val callback = object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) {
+            // Enables or Disables the ability to move items up and down.
+            override fun onMove(
+                recyclerView: RecyclerView,
+                viewHolder: RecyclerView.ViewHolder,
+                target: RecyclerView.ViewHolder
+            ): Boolean {
+                return false
+            }
+
+            // Callback triggered when a user swiped an item.
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                val position = viewHolder.adapterPosition
+                val jobToDelete = jobs[position]
+
+                CoroutineScope(Dispatchers.Main).launch {
+                    withContext(Dispatchers.IO) {
+                        jobRepository.deleteJob(jobToDelete)
+                    }
+                    getJobsFromDatabase()
+                }
+
+            }
+        }
+        return ItemTouchHelper(callback)
     }
 
 }
