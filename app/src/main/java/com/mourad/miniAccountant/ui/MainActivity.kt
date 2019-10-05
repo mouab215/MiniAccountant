@@ -5,7 +5,6 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -106,6 +105,12 @@ class MainActivity : AppCompatActivity() {
             if (validateTime(dialog.etStartHours.value, dialog.etStartMinutes.value)) {
                 dialog.clDialog3.visibility = View.VISIBLE
             }
+        }
+        dialog.ibBack3.setOnClickListener {
+            dialog.clDialog3.visibility = View.INVISIBLE
+        }
+        dialog.ibBack2.setOnClickListener {
+            dialog.clDialog2.visibility = View.INVISIBLE
         }
         dialog.btnAdd.setOnClickListener {
             if (validateTime(dialog.etEndHours.value, dialog.etEndMinutes.value)) {
