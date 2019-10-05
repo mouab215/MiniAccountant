@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#008577</color>
-    <color name="colorPrimaryDark">#00574B</color>
-    <color name="colorAccent">#D81B60</color>
+    <color name="colorPrimary">#394D6D</color>
+    <color name="colorPrimary2">#b3b3b3</color>
+    <color name="colorAccent">#336ecc</color>
+
     <color name="colorAccent2">#f2f2f2</color>
+    <color name="splash_shadow_color">#DADADA</color>
+    <color name="background">#F2F2F2</color>
 
     <color name="moneyPaid">#00CC00</color>
     <color name="moneyToBePaid">#FF4D4D</color>
