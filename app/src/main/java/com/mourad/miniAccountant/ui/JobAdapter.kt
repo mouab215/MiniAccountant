@@ -37,8 +37,8 @@ class JobAdapter(private val jobs: List<Job>, val clickListener: (Job) -> Unit) 
             itemView.setOnClickListener { clickListener(job) }
 
             itemView.tvDate.text = SimpleDateFormat("EEE dd MMM").format(job.startDateTime.time)
-            itemView.tvTimes.text = SimpleDateFormat("hh:mm").format(job.startDateTime.time) +
-                    " till " + SimpleDateFormat("hh:mm").format(job.endDateTime.time)
+            itemView.tvTimes.text = SimpleDateFormat("HH:mm").format(job.startDateTime.time) +
+                    " till " + SimpleDateFormat("HH:mm").format(job.endDateTime.time)
             itemView.tvWorkedHours.text = job.getWorkedHours().toString()
             itemView.tvSalary.text = context.getString(R.string.money, job.getSalary())
 
