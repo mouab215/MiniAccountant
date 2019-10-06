@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="colorPrimary">#394D6D</color>
-    <color name="colorPrimary2">#b3b3b3</color>
+    <color name="colorSecondary">#b3b3b3</color>
     <color name="colorAccent">#336ecc</color>
 
-    <color name="colorAccent2">#f2f2f2</color>
+    <color name="colorPrimaryLighter">#465f86</color>
+    <color name="colorAccentLighter">#5c8bd6</color>
+
     <color name="splash_shadow_color">#DADADA</color>
     <color name="background">#F2F2F2</color>
 
