@@ -30,7 +30,6 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        setSupportActionBar(toolbar)
 
         jobRepository = JobRepository(this)
         initViews()
@@ -132,18 +131,24 @@ class MainActivity : AppCompatActivity() {
             this@MainActivity.jobAdapter.notifyDataSetChanged()
 
             var toBePaidTotal = 0.0
+            var toBePaidHours = 0.0
             var earnedTotal = 0.0
+            var earnedHours = 0.0
 
             jobs.forEach() {
                 if (it.isPaid) {
                     earnedTotal += it.getSalary()
+                    earnedHours += it.getWorkedHours()
                 } else {
                     toBePaidTotal += it.getSalary()
+                    toBePaidHours += it.getWorkedHours()
                 }
             }
 
             tvToBePaid.text = getString(R.string.money, toBePaidTotal)
+            tvToBePaidInHours.text = getString(R.string.hours, toBePaidHours)
             tvEarned.text = getString(R.string.money, earnedTotal)
+            tvEarnedInHours.text = getString(R.string.hours, earnedHours)
         }
     }
 

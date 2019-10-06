@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Mini Accountant</string>
+    <string name="app_name">Stack it!</string>
 
     <string name="main_to_be_payed">To be paid</string>
     <string name="main_earned">Earned</string>
@@ -22,4 +22,5 @@
 
     <string name="job_total">Worked Hours</string>
     <string name="money">€ %.2f</string>
+    <string name="hours">(%.2f hours)</string>
 </resources>
