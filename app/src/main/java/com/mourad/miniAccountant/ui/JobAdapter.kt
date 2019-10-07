@@ -44,6 +44,8 @@ class JobAdapter(private val jobs: List<Job>, val clickListener: (Job) -> Unit) 
 
             if (job.isPaid) {
                 itemView.tvSalary.setTextColor(context.getColor(R.color.moneyPaid))
+            } else if (!job.isPaid) {
+                itemView.tvSalary.setTextColor(context.getColor(R.color.moneyToBePaid))
             }
 
         }

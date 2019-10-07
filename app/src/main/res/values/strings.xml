@@ -18,6 +18,10 @@
     <string name="dialog_save_button">Add</string>
     <string name="dialog_next_button">Next</string>
 
+    <string name="dialog_delete_title">Are you sure you want \nto delete this job?</string>
+    <string name="dialog_delete_agree">Yes</string>
+    <string name="dialog_delete_no">No</string>
+
     <string name="error_empty_fields">Please fill in all the fields!</string>
 
     <string name="job_total">Worked Hours</string>

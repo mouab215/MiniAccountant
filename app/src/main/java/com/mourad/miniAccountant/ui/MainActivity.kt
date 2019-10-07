@@ -16,7 +16,10 @@ import com.mourad.miniAccountant.repository.JobRepository
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
 import kotlinx.android.synthetic.main.dialog_add_job.*
+import kotlinx.android.synthetic.main.dialog_add_job.btnCancel
+import kotlinx.android.synthetic.main.dialog_delete_job.*
 import kotlinx.coroutines.*
+import java.text.FieldPosition
 import java.text.SimpleDateFormat
 import java.util.Calendar
 
@@ -95,7 +98,7 @@ class MainActivity : AppCompatActivity() {
         dialog.etEndHours.value = SimpleDateFormat("HH").format(today.time).toInt()
         dialog.etEndMinutes.value = SimpleDateFormat("mm").format(today.time).toInt()
 
-        dialog.btnNext.setOnClickListener {
+        dialog.btnCancel.setOnClickListener {
             if (validateDate(dialog.etYear.value, dialog.etMonth.value, dialog.etDay.value)) {
                 dialog.clDialog2.visibility = View.VISIBLE
             }
@@ -121,10 +124,33 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    private fun buildDialogDeleteJob(jobToDelete: Job, position: Int) {
+        var dialog = Dialog(this@MainActivity)
+        dialog.setContentView(R.layout.dialog_delete_job)
+        dialog.window.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+
+        dialog.btnCancel.setOnClickListener {
+            jobAdapter.notifyItemChanged(position)
+            dialog.cancel()
+        }
+
+        dialog.btnDelete.setOnClickListener {
+            CoroutineScope(Dispatchers.Main).launch {
+                withContext(Dispatchers.IO) {
+                    jobRepository.deleteJob(jobToDelete)
+                }
+                getJobsFromDatabase()
+            }
+            dialog.cancel()
+        }
+
+        dialog.show()
+    }
+
     private fun getJobsFromDatabase() {
         mainScope.launch {
             val jobs = withContext(Dispatchers.IO) {
-                jobRepository.getAllJobs()
+                jobRepository.getAllJobs().sortedByDescending { it.startDateTime }
             }
             this@MainActivity.jobs.clear()
             this@MainActivity.jobs.addAll(jobs)
@@ -236,13 +262,7 @@ class MainActivity : AppCompatActivity() {
                 val position = viewHolder.adapterPosition
                 val jobToDelete = jobs[position]
 
-                CoroutineScope(Dispatchers.Main).launch {
-                    withContext(Dispatchers.IO) {
-                        jobRepository.deleteJob(jobToDelete)
-                    }
-                    getJobsFromDatabase()
-                }
-
+                buildDialogDeleteJob(jobToDelete, position)
             }
         }
         return ItemTouchHelper(callback)

@@ -12,4 +12,14 @@
 
     <color name="moneyPaid">#00CC00</color>
     <color name="moneyToBePaid">#FF4D4D</color>
+
+    <color name="buttonAgreePrimary">#737373</color>
+    <color name="buttonAgreeSecondary">#8c8c8c</color>
+    <color name="buttonAgreePressedPrimary">#808080</color>
+    <color name="buttonAgreePressedSecondary">#a6a6a6</color>
+
+    <color name="buttonCancelPrimary">#ff1a1a</color>
+    <color name="buttonCancelSecondary">#ff3333</color>
+    <color name="buttonCancelPressedPrimary">#ff4d4d</color>
+    <color name="buttonCancelPressedSecondary">#ff6666</color>
 </resources>
