@@ -22,6 +22,10 @@
     <string name="dialog_delete_agree">Yes</string>
     <string name="dialog_delete_no">No</string>
 
+    <string name="dialog_update_title">Are you sure you want to \nset this job to \"To Be Paid\"?</string>
+    <string name="dialog_update_agree">Yes</string>
+    <string name="dialog_update_no">No</string>
+
     <string name="error_empty_fields">Please fill in all the fields!</string>
 
     <string name="job_total">Worked Hours</string>

@@ -18,8 +18,8 @@ import kotlinx.android.synthetic.main.content_main.*
 import kotlinx.android.synthetic.main.dialog_add_job.*
 import kotlinx.android.synthetic.main.dialog_add_job.btnCancel
 import kotlinx.android.synthetic.main.dialog_delete_job.*
+import kotlinx.android.synthetic.main.dialog_update_job.*
 import kotlinx.coroutines.*
-import java.text.FieldPosition
 import java.text.SimpleDateFormat
 import java.util.Calendar
 
@@ -237,7 +237,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun onJobClicked(clickedJob: Job) {
-        if (!clickedJob.isPaid) {
+        if (clickedJob.isPaid) {
+            buildDialogUpdateJob(clickedJob)
+        } else {
             mainScope.launch {
                 withContext(Dispatchers.IO) {
                     clickedJob.isPaid = true
@@ -246,6 +248,29 @@ class MainActivity : AppCompatActivity() {
                 getJobsFromDatabase()
             }
         }
+    }
+
+    private fun buildDialogUpdateJob(clickedJob: Job) {
+        var dialog = Dialog(this@MainActivity)
+        dialog.setContentView(R.layout.dialog_update_job)
+        dialog.window.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+
+        dialog.btnCancel.setOnClickListener {
+            dialog.cancel()
+        }
+
+        dialog.btnAgree.setOnClickListener {
+            mainScope.launch {
+                withContext(Dispatchers.IO) {
+                    clickedJob.isPaid = false
+                    jobRepository.updateJob(clickedJob)
+                }
+                getJobsFromDatabase()
+            }
+            dialog.cancel()
+        }
+
+        dialog.show()
     }
 
     private fun createItemTouchHelper(): ItemTouchHelper {

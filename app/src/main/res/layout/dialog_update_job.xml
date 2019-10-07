@@ -9,7 +9,7 @@
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/clDialogDelete"
+        android:id="@+id/clDialogUpdate"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:visibility="visible"
@@ -26,7 +26,7 @@
             android:layout_marginTop="45dp"
             android:layout_marginEnd="32dp"
             android:fontFamily="@font/roboto_light"
-            android:text="@string/dialog_delete_title"
+            android:text="@string/dialog_update_title"
             android:textAlignment="center"
             android:textColor="@android:color/black"
             android:textSize="18sp"
@@ -39,7 +39,7 @@
             android:layout_width="80dp"
             android:layout_height="35dp"
             android:layout_marginEnd="45dp"
-            android:background="@drawable/button_custom_grey_rounded"
+            android:background="@drawable/button_custom_anissa_rounded"
             android:drawableRight="@drawable/logo_cancel_drawable"
             android:fontFamily="@font/roboto_light"
             android:paddingEnd="5dp"
@@ -47,21 +47,21 @@
             android:textAllCaps="false"
             android:textColor="@android:color/white"
             android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="@+id/btnDelete"
+            app:layout_constraintBottom_toBottomOf="@+id/btnAgree"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/btnAgree"
-            app:layout_constraintTop_toTopOf="@+id/btnDelete" />
+            app:layout_constraintTop_toTopOf="@+id/btnAgree" />
 
         <Button
-            android:id="@+id/btnDelete"
+            android:id="@+id/btnAgree"
             android:layout_width="80dp"
             android:layout_height="35dp"
             android:layout_marginStart="45dp"
             android:layout_marginTop="24dp"
             android:layout_marginEnd="8dp"
             android:layout_marginBottom="32dp"
-            android:background="@drawable/button_custom_anissa_rounded"
-            android:drawableRight="@drawable/logo_delete_drawable"
+            android:background="@drawable/button_custom_rounded"
+            android:drawableRight="@drawable/logo_confirm_drawable"
             android:fontFamily="@font/roboto_light"
             android:paddingEnd="5dp"
             android:text="@string/dialog_delete_agree"
