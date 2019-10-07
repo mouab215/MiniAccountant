@@ -52,6 +52,7 @@ class MainActivity : AppCompatActivity() {
         dialog.setContentView(R.layout.dialog_add_job)
         dialog.window.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
+        dialog.clDialog.visibility = View.VISIBLE
         dialog.clDialog2.visibility = View.INVISIBLE
         dialog.clDialog3.visibility = View.INVISIBLE
 
@@ -101,18 +102,22 @@ class MainActivity : AppCompatActivity() {
         dialog.btnCancel.setOnClickListener {
             if (validateDate(dialog.etYear.value, dialog.etMonth.value, dialog.etDay.value)) {
                 dialog.clDialog2.visibility = View.VISIBLE
+                dialog.clDialog.visibility = View.INVISIBLE
             }
         }
         dialog.btnNext2.setOnClickListener {
             if (validateTime(dialog.etStartHours.value, dialog.etStartMinutes.value)) {
+                dialog.clDialog2.visibility = View.INVISIBLE
                 dialog.clDialog3.visibility = View.VISIBLE
             }
         }
         dialog.ibBack3.setOnClickListener {
             dialog.clDialog3.visibility = View.INVISIBLE
+            dialog.clDialog2.visibility = View.VISIBLE
         }
         dialog.ibBack2.setOnClickListener {
             dialog.clDialog2.visibility = View.INVISIBLE
+            dialog.clDialog.visibility = View.VISIBLE
         }
         dialog.btnAdd.setOnClickListener {
             if (validateTime(dialog.etEndHours.value, dialog.etEndMinutes.value)) {
