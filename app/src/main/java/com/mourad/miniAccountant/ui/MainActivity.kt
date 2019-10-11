@@ -10,15 +10,15 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.mourad.miniAccountant.R
-import com.mourad.miniAccountant.model.Job
-import com.mourad.miniAccountant.repository.JobRepository
+import com.mourad.miniAccountant.model.Shift
+import com.mourad.miniAccountant.repository.ShiftRepository
 
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
-import kotlinx.android.synthetic.main.dialog_add_job.*
-import kotlinx.android.synthetic.main.dialog_add_job.btnCancel
-import kotlinx.android.synthetic.main.dialog_delete_job.*
-import kotlinx.android.synthetic.main.dialog_update_job.*
+import kotlinx.android.synthetic.main.dialog_add_shift.*
+import kotlinx.android.synthetic.main.dialog_add_shift.btnCancel
+import kotlinx.android.synthetic.main.dialog_delete_shift.*
+import kotlinx.android.synthetic.main.dialog_update_shift.*
 import kotlinx.coroutines.*
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -26,30 +26,30 @@ import java.util.Calendar
 class MainActivity : AppCompatActivity() {
 
     private val mainScope = CoroutineScope(Dispatchers.Main)
-    private lateinit var jobRepository: JobRepository
-    private var jobs = arrayListOf<Job>()
-    private var jobAdapter = JobAdapter(jobs) { clickedJob: Job -> onJobClicked(clickedJob) }
+    private lateinit var shiftRepository: ShiftRepository
+    private var shifts = arrayListOf<Shift>()
+    private var shiftAdapter = ShiftAdapter(shifts) { clickedShift: Shift -> onJobClicked(clickedShift) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        jobRepository = JobRepository(this)
+        shiftRepository = ShiftRepository(this)
         initViews()
     }
 
     fun initViews() {
-        rvJobs.layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
-        rvJobs.adapter = jobAdapter
-        createItemTouchHelper().attachToRecyclerView(rvJobs)
-        getJobsFromDatabase()
+        rvShifts.layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
+        rvShifts.adapter = shiftAdapter
+        createItemTouchHelper().attachToRecyclerView(rvShifts)
+        getShiftsFromDatabase()
 
         fab.setOnClickListener { buildDialogAddJobDate() }
     }
 
     private fun buildDialogAddJobDate() {
         var dialog = Dialog(this@MainActivity)
-        dialog.setContentView(R.layout.dialog_add_job)
+        dialog.setContentView(R.layout.dialog_add_shift)
         dialog.window.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
         dialog.clDialog.visibility = View.VISIBLE
@@ -129,22 +129,22 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    private fun buildDialogDeleteJob(jobToDelete: Job, position: Int) {
+    private fun buildDialogDeleteShift(shiftToDelete: Shift, position: Int) {
         var dialog = Dialog(this@MainActivity)
-        dialog.setContentView(R.layout.dialog_delete_job)
+        dialog.setContentView(R.layout.dialog_delete_shift)
         dialog.window.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
         dialog.btnCancel.setOnClickListener {
-            jobAdapter.notifyItemChanged(position)
+            shiftAdapter.notifyItemChanged(position)
             dialog.cancel()
         }
 
         dialog.btnDelete.setOnClickListener {
             CoroutineScope(Dispatchers.Main).launch {
                 withContext(Dispatchers.IO) {
-                    jobRepository.deleteJob(jobToDelete)
+                    shiftRepository.deleteShift(shiftToDelete)
                 }
-                getJobsFromDatabase()
+                getShiftsFromDatabase()
             }
             dialog.cancel()
         }
@@ -152,21 +152,21 @@ class MainActivity : AppCompatActivity() {
         dialog.show()
     }
 
-    private fun getJobsFromDatabase() {
+    private fun getShiftsFromDatabase() {
         mainScope.launch {
-            val jobs = withContext(Dispatchers.IO) {
-                jobRepository.getAllJobs().sortedByDescending { it.startDateTime }
+            val shifts = withContext(Dispatchers.IO) {
+                shiftRepository.getAllShifts().sortedByDescending { it.startDateTime }
             }
-            this@MainActivity.jobs.clear()
-            this@MainActivity.jobs.addAll(jobs)
-            this@MainActivity.jobAdapter.notifyDataSetChanged()
+            this@MainActivity.shifts.clear()
+            this@MainActivity.shifts.addAll(shifts)
+            this@MainActivity.shiftAdapter.notifyDataSetChanged()
 
             var toBePaidTotal = 0.0
             var toBePaidHours = 0.0
             var earnedTotal = 0.0
             var earnedHours = 0.0
 
-            jobs.forEach() {
+            shifts.forEach() {
                 if (it.isPaid) {
                     earnedTotal += it.getSalary()
                     earnedHours += it.getWorkedHours()
@@ -227,32 +227,32 @@ class MainActivity : AppCompatActivity() {
                 dialog.etEndMinutes.value
             )
 
-            val job = Job(startDate, endDate, false)
+            val shift = Shift(startDate, endDate, false)
             withContext(Dispatchers.IO) {
-                jobRepository.insertJob(job)
+                shiftRepository.insertShift(shift)
             }
-            getJobsFromDatabase()
+            getShiftsFromDatabase()
             dialog.cancel()
         }
     }
 
-    fun onJobClicked(clickedJob: Job) {
-        if (clickedJob.isPaid) {
-            buildDialogUpdateJob(clickedJob)
+    fun onJobClicked(clickedShift: Shift) {
+        if (clickedShift.isPaid) {
+            buildDialogUpdateShift(clickedShift)
         } else {
             mainScope.launch {
                 withContext(Dispatchers.IO) {
-                    clickedJob.isPaid = true
-                    jobRepository.updateJob(clickedJob)
+                    clickedShift.isPaid = true
+                    shiftRepository.updateShift(clickedShift)
                 }
-                getJobsFromDatabase()
+                getShiftsFromDatabase()
             }
         }
     }
 
-    private fun buildDialogUpdateJob(clickedJob: Job) {
+    private fun buildDialogUpdateShift(clickedShift: Shift) {
         var dialog = Dialog(this@MainActivity)
-        dialog.setContentView(R.layout.dialog_update_job)
+        dialog.setContentView(R.layout.dialog_update_shift)
         dialog.window.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
         dialog.btnCancel.setOnClickListener {
@@ -262,10 +262,10 @@ class MainActivity : AppCompatActivity() {
         dialog.btnAgree.setOnClickListener {
             mainScope.launch {
                 withContext(Dispatchers.IO) {
-                    clickedJob.isPaid = false
-                    jobRepository.updateJob(clickedJob)
+                    clickedShift.isPaid = false
+                    shiftRepository.updateShift(clickedShift)
                 }
-                getJobsFromDatabase()
+                getShiftsFromDatabase()
             }
             dialog.cancel()
         }
@@ -290,9 +290,9 @@ class MainActivity : AppCompatActivity() {
             // Callback triggered when a user swiped an item.
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 val position = viewHolder.adapterPosition
-                val jobToDelete = jobs[position]
+                val shiftToDelete = shifts[position]
 
-                buildDialogDeleteJob(jobToDelete, position)
+                buildDialogDeleteShift(shiftToDelete, position)
             }
         }
         return ItemTouchHelper(callback)

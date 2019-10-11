@@ -4,7 +4,7 @@
     <string name="main_to_be_payed">To be paid</string>
     <string name="main_earned">Earned</string>
 
-    <string name="dialog_title">Add a new Job</string>
+    <string name="dialog_title">Add a new Shift</string>
     <string name="dialog_date">On what date did you work?</string>
     <string name="dialog_start_time">At what time did you start?</string>
     <string name="dialog_year">Year</string>
@@ -18,17 +18,17 @@
     <string name="dialog_save_button">Add</string>
     <string name="dialog_next_button">Next</string>
 
-    <string name="dialog_delete_title">Are you sure you want \nto delete this job?</string>
+    <string name="dialog_delete_title">Are you sure you want \nto delete this shift?</string>
     <string name="dialog_delete_agree">Yes</string>
     <string name="dialog_delete_no">No</string>
 
-    <string name="dialog_update_title">Are you sure you want to \nset this job to \"To Be Paid\"?</string>
+    <string name="dialog_update_title">Are you sure you want to \nset this shift to \"To Be Paid\"?</string>
     <string name="dialog_update_agree">Yes</string>
     <string name="dialog_update_no">No</string>
 
     <string name="error_empty_fields">Please fill in all the fields!</string>
 
-    <string name="job_total">Worked Hours</string>
+    <string name="shift_total">Worked Hours</string>
     <string name="money">€ %.2f</string>
     <string name="hours">(%.2f hours)</string>
 </resources>

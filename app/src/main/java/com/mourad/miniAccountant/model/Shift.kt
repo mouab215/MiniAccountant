@@ -12,7 +12,7 @@ import java.util.concurrent.TimeUnit
 
 @Parcelize
 @Entity(tableName = "jobTable")
-data class Job(
+data class Shift(
 
     @ColumnInfo(name = "startDateTime")
     var startDateTime: Calendar,

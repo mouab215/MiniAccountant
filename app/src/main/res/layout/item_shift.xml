@@ -59,7 +59,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
         android:fontFamily="@font/roboto_light"
-        android:text="@string/job_total"
+        android:text="@string/shift_total"
         android:textColor="@android:color/black"
         android:textSize="14sp"
         android:textStyle="bold"
