@@ -10,45 +10,57 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.mourad.miniAccountant.R
+import com.mourad.miniAccountant.model.Job
 import com.mourad.miniAccountant.model.Shift
 import com.mourad.miniAccountant.repository.ShiftRepository
 
-import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.content_main.*
+import kotlinx.android.synthetic.main.activity_shift.*
+import kotlinx.android.synthetic.main.content_shift.*
 import kotlinx.android.synthetic.main.dialog_add_shift.*
 import kotlinx.android.synthetic.main.dialog_add_shift.btnCancel
 import kotlinx.android.synthetic.main.dialog_delete_shift.*
 import kotlinx.android.synthetic.main.dialog_update_shift.*
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.text.SimpleDateFormat
 import java.util.Calendar
 
-class MainActivity : AppCompatActivity() {
+const val JOB_EXTRA = "JOB_EXTRA"
+class ShiftActivity : AppCompatActivity() {
 
     private val mainScope = CoroutineScope(Dispatchers.Main)
     private lateinit var shiftRepository: ShiftRepository
+    private lateinit var job: Job
     private var shifts = arrayListOf<Shift>()
-    private var shiftAdapter = ShiftAdapter(shifts) { clickedShift: Shift -> onJobClicked(clickedShift) }
+    private var shiftAdapter = ShiftAdapter(shifts) { clickedShift: Shift -> onShiftClicked(clickedShift) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_shift)
+
+        job = intent.getParcelableExtra(JOB_EXTRA)
 
         shiftRepository = ShiftRepository(this)
         initViews()
     }
 
     fun initViews() {
+        // Set the page title
+        tvTitle.text = job.name
+
+                // Initialize the recyclerView
         rvShifts.layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
         rvShifts.adapter = shiftAdapter
         createItemTouchHelper().attachToRecyclerView(rvShifts)
         getShiftsFromDatabase()
 
-        fab.setOnClickListener { buildDialogAddJobDate() }
+        fab.setOnClickListener { buildDialogAddShiftDate() }
     }
 
-    private fun buildDialogAddJobDate() {
-        var dialog = Dialog(this@MainActivity)
+    private fun buildDialogAddShiftDate() {
+        var dialog = Dialog(this@ShiftActivity)
         dialog.setContentView(R.layout.dialog_add_shift)
         dialog.window.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
@@ -121,7 +133,7 @@ class MainActivity : AppCompatActivity() {
         }
         dialog.btnAdd.setOnClickListener {
             if (validateTime(dialog.etEndHours.value, dialog.etEndMinutes.value)) {
-                addJob(dialog)
+                addShift(dialog)
                 dialog.cancel()
             }
         }
@@ -130,7 +142,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun buildDialogDeleteShift(shiftToDelete: Shift, position: Int) {
-        var dialog = Dialog(this@MainActivity)
+        var dialog = Dialog(this@ShiftActivity)
         dialog.setContentView(R.layout.dialog_delete_shift)
         dialog.window.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
@@ -155,11 +167,11 @@ class MainActivity : AppCompatActivity() {
     private fun getShiftsFromDatabase() {
         mainScope.launch {
             val shifts = withContext(Dispatchers.IO) {
-                shiftRepository.getAllShifts().sortedByDescending { it.startDateTime }
+                shiftRepository.getAllShiftsOfJob(job.id!!.toLong()).sortedByDescending { it.startDateTime }
             }
-            this@MainActivity.shifts.clear()
-            this@MainActivity.shifts.addAll(shifts)
-            this@MainActivity.shiftAdapter.notifyDataSetChanged()
+            this@ShiftActivity.shifts.clear()
+            this@ShiftActivity.shifts.addAll(shifts)
+            this@ShiftActivity.shiftAdapter.notifyDataSetChanged()
 
             var toBePaidTotal = 0.0
             var toBePaidHours = 0.0
@@ -180,6 +192,13 @@ class MainActivity : AppCompatActivity() {
             tvToBePaidInHours.text = getString(R.string.hours, toBePaidHours)
             tvEarned.text = getString(R.string.money, earnedTotal)
             tvEarnedInHours.text = getString(R.string.hours, earnedHours)
+
+            // Check for no shifts
+            if (shifts.isEmpty()) {
+                clNoShifts.visibility = View.VISIBLE
+            } else {
+                clNoShifts.visibility = View.INVISIBLE
+            }
         }
     }
 
@@ -208,7 +227,7 @@ class MainActivity : AppCompatActivity() {
         return true
     }
 
-    private fun addJob(dialog: Dialog) {
+    private fun addShift(dialog: Dialog) {
         mainScope.launch {
             var startDate = Calendar.getInstance()
             startDate.set(
@@ -227,7 +246,7 @@ class MainActivity : AppCompatActivity() {
                 dialog.etEndMinutes.value
             )
 
-            val shift = Shift(startDate, endDate, false)
+            val shift = Shift(startDate, endDate, false, job.id!!.toLong())
             withContext(Dispatchers.IO) {
                 shiftRepository.insertShift(shift)
             }
@@ -236,7 +255,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun onJobClicked(clickedShift: Shift) {
+    fun onShiftClicked(clickedShift: Shift) {
         if (clickedShift.isPaid) {
             buildDialogUpdateShift(clickedShift)
         } else {
@@ -251,7 +270,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun buildDialogUpdateShift(clickedShift: Shift) {
-        var dialog = Dialog(this@MainActivity)
+        var dialog = Dialog(this@ShiftActivity)
         dialog.setContentView(R.layout.dialog_update_shift)
         dialog.window.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 

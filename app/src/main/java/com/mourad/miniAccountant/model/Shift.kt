@@ -3,6 +3,8 @@ package com.mourad.miniAccountant.model
 import android.os.Parcelable
 import androidx.room.ColumnInfo
 import androidx.room.Entity
+import androidx.room.ForeignKey
+import androidx.room.ForeignKey.CASCADE
 import androidx.room.PrimaryKey
 import com.mourad.miniAccountant.util.Constants
 import com.mourad.miniAccountant.util.Helpers
@@ -11,7 +13,13 @@ import java.util.*
 import java.util.concurrent.TimeUnit
 
 @Parcelize
-@Entity(tableName = "jobTable")
+@Entity(tableName = "shiftTable",
+        foreignKeys = arrayOf(
+            ForeignKey(entity = Job::class,
+                parentColumns = arrayOf("id"),
+                childColumns = arrayOf("job_id"),
+                onDelete = CASCADE))
+)
 data class Shift(
 
     @ColumnInfo(name = "startDateTime")
@@ -22,6 +30,9 @@ data class Shift(
 
     @ColumnInfo(name = "isPaid")
     var isPaid: Boolean,
+
+    @ColumnInfo(name = "job_id")
+    var jobId: Long,
 
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id")

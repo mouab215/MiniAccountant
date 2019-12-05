@@ -4,9 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.MainActivity">
+    tools:context=".ui.ShiftActivity">
 
-    <include layout="@layout/content_main" />
+    <include layout="@layout/content_shift" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab"
@@ -133,6 +133,7 @@
     <include
         layout="@layout/logo_overlay"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_gravity="top" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
