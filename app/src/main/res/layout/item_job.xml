@@ -11,7 +11,7 @@
     android:layout_marginBottom="5dp"
     android:background="@drawable/rectangle_primary_ripple_effect"
     android:clickable="true"
-    android:elevation="1dp">
+    android:elevation="2dp">
 
     <TextView
         android:id="@+id/tvJobName"

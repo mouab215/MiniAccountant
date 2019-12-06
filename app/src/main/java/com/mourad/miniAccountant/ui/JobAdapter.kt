@@ -10,9 +10,15 @@ import com.mourad.miniAccountant.R
 import com.mourad.miniAccountant.model.Job
 import kotlinx.android.synthetic.main.item_job.view.*
 
+
 class JobAdapter(private val jobs: List<Job>, private val clickListener: (Job) -> Unit) : RecyclerView.Adapter<JobAdapter.ViewHolder>() {
 
     lateinit var context: Context
+    val colors = arrayOf(R.drawable.rectangle_accent_ripple_effect,
+        R.drawable.rectangle_grey_ripple_effect,
+        R.drawable.rectangle_white_ripple_effect,
+        R.drawable.rectangle_primary_ripple_effect)
+    var i = 0
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         context = parent.context
@@ -35,7 +41,21 @@ class JobAdapter(private val jobs: List<Job>, private val clickListener: (Job) -
         fun bind(job: Job, clickListener: (Job) -> Unit) {
             itemView.setOnClickListener { clickListener(job) }
 
+            itemView.background = context.getDrawable(getNextColor(colors))
+            if (i == 2 || i == 3) {
+                itemView.tvJobName.setTextColor(context.getColor(android.R.color.black))
+            }
             itemView.tvJobName.text = job.name
+        }
+
+        private fun getNextColor(array: Array<Int>): Int {
+//            val rnd = Random().nextInt(array.size)
+//            return array[rnd]
+            if (i == array.size) {
+                i = 0
+            }
+            i++
+            return array[i - 1]
         }
     }
 
