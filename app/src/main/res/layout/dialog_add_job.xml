@@ -81,6 +81,7 @@
                 android:id="@+id/etJobTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:inputType="textCapSentences"
                 android:hint="@string/jobs_dialog_hint_1" />
         </com.google.android.material.textfield.TextInputLayout>
 

@@ -6,7 +6,6 @@ import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.ForeignKey.CASCADE
 import androidx.room.PrimaryKey
-import com.mourad.miniAccountant.util.Constants
 import com.mourad.miniAccountant.util.Helpers
 import kotlinx.android.parcel.Parcelize
 import java.util.*
@@ -39,8 +38,8 @@ data class Shift(
     var id: Long? = null
 ): Parcelable {
 
-    fun getSalary(): Double {
-        return Constants.HOURLY_RATE * getWorkedHours()
+    fun getSalary(hourlyWage: Double): Double {
+        return hourlyWage * getWorkedHours()
     }
 
     fun getWorkedHours(): Double {

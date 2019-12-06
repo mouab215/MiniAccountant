@@ -27,7 +27,7 @@
         android:fontFamily="@font/helvetica_neue_med"
         android:text="@string/jobs_title"
         android:textColor="@android:color/black"
-        android:textSize="50sp"
+        android:textSize="40sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/rvJobs"
         app:layout_constraintStart_toStartOf="parent" />

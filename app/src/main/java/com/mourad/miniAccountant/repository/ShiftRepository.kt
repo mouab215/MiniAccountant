@@ -2,7 +2,6 @@ package com.mourad.miniAccountant.repository
 
 import android.content.Context
 import com.mourad.miniAccountant.dao.ShiftDao
-import com.mourad.miniAccountant.model.Job
 import com.mourad.miniAccountant.model.Shift
 import com.mourad.miniAccountant.room.AccountantRoomDatabase
 

@@ -3,7 +3,6 @@ package com.mourad.miniAccountant.repository
 import android.content.Context
 import com.mourad.miniAccountant.dao.JobDao
 import com.mourad.miniAccountant.model.Job
-import com.mourad.miniAccountant.model.Shift
 import com.mourad.miniAccountant.room.AccountantRoomDatabase
 
 class JobRepository(context: Context) {
@@ -16,6 +15,8 @@ class JobRepository(context: Context) {
     }
 
     suspend fun getAllJobs(): List<Job> = jobDao.getAllJobs()
+
+    suspend fun getJob(jobId: Long): Job = jobDao.getJob(jobId)
 
     suspend fun insertJob(job: Job) = jobDao.insertJob(job)
 

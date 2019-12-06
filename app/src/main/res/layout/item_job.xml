@@ -9,7 +9,7 @@
     android:layout_marginTop="5dp"
     android:layout_marginEnd="5dp"
     android:layout_marginBottom="5dp"
-    android:background="@drawable/rectangle_color_primary_rounded"
+    android:background="@drawable/rectangle_primary_ripple_effect"
     android:clickable="true"
     android:elevation="1dp">
 
@@ -20,7 +20,7 @@
         android:layout_marginStart="10dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="10dp"
-        android:fontFamily="@font/helvetica_neue_lt"
+        android:fontFamily="@font/helvetica_neue_med"
         android:text="Job Name"
         android:textAlignment="viewStart"
         android:textColor="@android:color/white"

@@ -180,10 +180,10 @@ class ShiftActivity : AppCompatActivity() {
 
             shifts.forEach() {
                 if (it.isPaid) {
-                    earnedTotal += it.getSalary()
+                    earnedTotal += it.getSalary(job.hourlyWage)
                     earnedHours += it.getWorkedHours()
                 } else {
-                    toBePaidTotal += it.getSalary()
+                    toBePaidTotal += it.getSalary(job.hourlyWage)
                     toBePaidHours += it.getWorkedHours()
                 }
             }

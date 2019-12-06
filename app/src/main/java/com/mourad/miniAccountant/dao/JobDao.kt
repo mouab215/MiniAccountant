@@ -9,6 +9,9 @@ interface JobDao {
     @Query("SELECT * FROM jobTable")
     fun getAllJobs(): List<Job>
 
+    @Query("SELECT * FROM jobTable WHERE id = :jobId")
+    fun getJob(jobId: Long): Job
+
     @Insert
     fun insertJob(shift: Job)
 
