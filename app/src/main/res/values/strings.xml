@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">Stack it!</string>
+    <string name="credits">Made by Mourad Abouhcen\nwhile making mucho\n %s %s dinero</string>
 
     <string name="main_to_be_payed">To be paid</string>
     <string name="main_earned">Earned</string>
@@ -44,4 +45,19 @@
     <string name="euro_sign">€</string>
     <string name="hours">(%.2f hours)</string>
     <string name="title_activity_jobs">JobsActivity</string>
+
+    <!--SettingsActivity Strings-->
+    <string name="settings_title">Settings</string>
+    <string name="settings_tab_general">General</string>
+    <string name="settings_tab_danger_zone">Danger zone</string>
+    <string name="settings_top_text_delete_job">Delete this Job?</string>
+    <string name="settings_text_delete_job">Delete %s</string>
+
+    <!--FontAwesome5 Strings-->
+    <!--remove from 'x' till ';' -->
+    <string name="fa_slider">&#xf1de;</string>
+    <string name="fa_back">&#xf053;</string>
+    <string name="fa_close">&#xf00d;</string>
+    <string name="fa_question_mark">&#xf059;</string>
+    <string name="fa_edit">&#xf044;</string>
 </resources>

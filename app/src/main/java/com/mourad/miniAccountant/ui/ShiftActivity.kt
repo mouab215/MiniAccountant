@@ -1,7 +1,9 @@
 package com.mourad.miniAccountant.ui
 
 import android.app.Dialog
+import android.content.Intent
 import android.graphics.Color
+import android.graphics.Typeface
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.View
@@ -50,13 +52,22 @@ class ShiftActivity : AppCompatActivity() {
         // Set the page title
         tvTitle.text = job.name
 
-                // Initialize the recyclerView
+        // Initialize the recyclerView
         rvShifts.layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
         rvShifts.adapter = shiftAdapter
         createItemTouchHelper().attachToRecyclerView(rvShifts)
         getShiftsFromDatabase()
 
+        // Set the onClickListeners
         fab.setOnClickListener { buildDialogAddShiftDate() }
+        tvBackClick.setOnClickListener { finish() }
+        tvSettingsClick.setOnClickListener { onSettingsClicked() }
+    }
+
+    fun onSettingsClicked() {
+        val intent = Intent(this, SettingsActivity::class.java)
+        intent.putExtra(JOB_SETTINGS, job)
+        startActivity(intent)
     }
 
     private fun buildDialogAddShiftDate() {

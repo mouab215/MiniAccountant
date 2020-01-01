@@ -39,7 +39,7 @@
             android:layout_width="80dp"
             android:layout_height="35dp"
             android:layout_marginEnd="45dp"
-            android:background="@drawable/button_custom_anissa_rounded"
+            android:background="@drawable/button_custom_anisa_rounded"
             android:drawableRight="@drawable/logo_cancel_drawable"
             android:fontFamily="@font/roboto_light"
             android:paddingEnd="5dp"
