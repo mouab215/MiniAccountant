@@ -71,7 +71,7 @@ class ShiftActivity : AppCompatActivity() {
         shiftActivityViewModel.shifts.observe(this, Observer { shifts ->
             this@ShiftActivity.shifts.clear()
             this@ShiftActivity.shifts.addAll(shifts)
-            this@ShiftActivity.shifts.sortedByDescending { it.startDateTime }
+//            this@ShiftActivity.shifts.sortedByDescending { it.startDateTime }
             shiftAdapter.notifyDataSetChanged()
             checkShifts()
         })
@@ -99,7 +99,7 @@ class ShiftActivity : AppCompatActivity() {
         dialog.clDialog3.visibility = View.INVISIBLE
 
         dialog.etYear.minValue = 2000
-        dialog.etYear.maxValue = 2019
+        dialog.etYear.maxValue = 2020
 
         dialog.etMonth.minValue = 1
         dialog.etMonth.maxValue = 12

@@ -11,7 +11,7 @@ interface ShiftDao {
     @Query("SELECT * FROM shiftTable")
     fun getAllShifts(): LiveData<List<Shift>>
 
-    @Query("SELECT * FROM shiftTable WHERE job_id = :jobId")
+    @Query("SELECT * FROM shiftTable WHERE job_id = :jobId ORDER BY startDateTime DESC")
     fun getAllShiftsOfJob(jobId: Long): LiveData<List<Shift>>
 
     @Insert
