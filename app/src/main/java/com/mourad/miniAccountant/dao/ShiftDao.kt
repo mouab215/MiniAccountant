@@ -1,5 +1,6 @@
 package com.mourad.miniAccountant.dao
 
+import androidx.lifecycle.LiveData
 import androidx.room.*
 import com.mourad.miniAccountant.model.Job
 import com.mourad.miniAccountant.model.Shift
@@ -8,10 +9,10 @@ import com.mourad.miniAccountant.model.Shift
 interface ShiftDao {
 
     @Query("SELECT * FROM shiftTable")
-    fun getAllShifts(): List<Shift>
+    fun getAllShifts(): LiveData<List<Shift>>
 
     @Query("SELECT * FROM shiftTable WHERE job_id = :jobId")
-    fun getAllShiftsOfJob(jobId: Long): List<Shift>
+    fun getAllShiftsOfJob(jobId: Long): LiveData<List<Shift>>
 
     @Insert
     fun insertShift(shift: Shift)

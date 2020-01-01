@@ -1,6 +1,7 @@
 package com.mourad.miniAccountant.repository
 
 import android.content.Context
+import androidx.lifecycle.LiveData
 import com.mourad.miniAccountant.dao.ShiftDao
 import com.mourad.miniAccountant.model.Shift
 import com.mourad.miniAccountant.room.AccountantRoomDatabase
@@ -14,14 +15,14 @@ class ShiftRepository(context: Context) {
         shiftDao = shiftRoomDatabase!!.shiftDao()
     }
 
-    suspend fun getAllShifts(): List<Shift> = shiftDao.getAllShifts()
+    fun getAllShifts(): LiveData<List<Shift>> = shiftDao.getAllShifts()
 
-    suspend fun getAllShiftsOfJob(jobId: Long): List<Shift> = shiftDao.getAllShiftsOfJob(jobId)
+    fun getAllShiftsOfJob(jobId: Long): LiveData<List<Shift>> = shiftDao.getAllShiftsOfJob(jobId)
 
-    suspend fun insertShift(shift: Shift) = shiftDao.insertShift(shift)
+    fun insertShift(shift: Shift) = shiftDao.insertShift(shift)
 
-    suspend fun deleteShift(shift: Shift) = shiftDao.deleteShift(shift)
+    fun deleteShift(shift: Shift) = shiftDao.deleteShift(shift)
 
-    suspend fun updateShift(shift: Shift) = shiftDao.updateShift(shift)
+    fun updateShift(shift: Shift) = shiftDao.updateShift(shift)
 
 }

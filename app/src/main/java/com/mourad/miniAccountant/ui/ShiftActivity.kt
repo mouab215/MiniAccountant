@@ -3,18 +3,20 @@ package com.mourad.miniAccountant.ui
 import android.app.Dialog
 import android.content.Intent
 import android.graphics.Color
-import android.graphics.Typeface
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.mourad.miniAccountant.R
 import com.mourad.miniAccountant.model.Job
 import com.mourad.miniAccountant.model.Shift
-import com.mourad.miniAccountant.repository.ShiftRepository
+import com.mourad.miniAccountant.viewmodel.MyViewModelFactory
+import com.mourad.miniAccountant.viewmodel.ShiftActivityViewModel
 
 import kotlinx.android.synthetic.main.activity_shift.*
 import kotlinx.android.synthetic.main.content_shift.*
@@ -33,8 +35,8 @@ const val JOB_EXTRA = "JOB_EXTRA"
 class ShiftActivity : AppCompatActivity() {
 
     private val mainScope = CoroutineScope(Dispatchers.Main)
-    private lateinit var shiftRepository: ShiftRepository
     private lateinit var job: Job
+    private lateinit var shiftActivityViewModel: ShiftActivityViewModel
     private var shifts = arrayListOf<Shift>()
     private var shiftAdapter = ShiftAdapter(shifts) { clickedShift: Shift -> onShiftClicked(clickedShift) }
 
@@ -44,8 +46,8 @@ class ShiftActivity : AppCompatActivity() {
 
         job = intent.getParcelableExtra(JOB_EXTRA)
 
-        shiftRepository = ShiftRepository(this)
         initViews()
+        initViewModel()
     }
 
     fun initViews() {
@@ -56,12 +58,29 @@ class ShiftActivity : AppCompatActivity() {
         rvShifts.layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
         rvShifts.adapter = shiftAdapter
         createItemTouchHelper().attachToRecyclerView(rvShifts)
-        getShiftsFromDatabase()
 
         // Set the onClickListeners
         fab.setOnClickListener { buildDialogAddShiftDate() }
         tvBackClick.setOnClickListener { finish() }
         tvSettingsClick.setOnClickListener { onSettingsClicked() }
+    }
+
+    private fun initViewModel() {
+        shiftActivityViewModel = ViewModelProviders.of(this, MyViewModelFactory(job, application)).get(ShiftActivityViewModel::class.java)
+
+        shiftActivityViewModel.shifts.observe(this, Observer { shifts ->
+            this@ShiftActivity.shifts.clear()
+            this@ShiftActivity.shifts.addAll(shifts)
+            this@ShiftActivity.shifts.sortedByDescending { it.startDateTime }
+            shiftAdapter.notifyDataSetChanged()
+            checkShifts()
+        })
+    }
+
+    private fun updateViewModelShift(shift: Shift) {
+        mainScope.launch {
+            shiftActivityViewModel.shift.value = shift
+        }
     }
 
     fun onSettingsClicked() {
@@ -165,9 +184,9 @@ class ShiftActivity : AppCompatActivity() {
         dialog.btnDelete.setOnClickListener {
             CoroutineScope(Dispatchers.Main).launch {
                 withContext(Dispatchers.IO) {
-                    shiftRepository.deleteShift(shiftToDelete)
+                    updateViewModelShift(shiftToDelete)
+                    shiftActivityViewModel.deleteShift()
                 }
-                getShiftsFromDatabase()
             }
             dialog.cancel()
         }
@@ -175,41 +194,32 @@ class ShiftActivity : AppCompatActivity() {
         dialog.show()
     }
 
-    private fun getShiftsFromDatabase() {
-        mainScope.launch {
-            val shifts = withContext(Dispatchers.IO) {
-                shiftRepository.getAllShiftsOfJob(job.id!!.toLong()).sortedByDescending { it.startDateTime }
-            }
-            this@ShiftActivity.shifts.clear()
-            this@ShiftActivity.shifts.addAll(shifts)
-            this@ShiftActivity.shiftAdapter.notifyDataSetChanged()
+    private fun checkShifts() {
+        var toBePaidTotal = 0.0
+        var toBePaidHours = 0.0
+        var earnedTotal = 0.0
+        var earnedHours = 0.0
 
-            var toBePaidTotal = 0.0
-            var toBePaidHours = 0.0
-            var earnedTotal = 0.0
-            var earnedHours = 0.0
-
-            shifts.forEach() {
-                if (it.isPaid) {
-                    earnedTotal += it.getSalary(job.hourlyWage)
-                    earnedHours += it.getWorkedHours()
-                } else {
-                    toBePaidTotal += it.getSalary(job.hourlyWage)
-                    toBePaidHours += it.getWorkedHours()
-                }
-            }
-
-            tvToBePaid.text = getString(R.string.money, toBePaidTotal)
-            tvToBePaidInHours.text = getString(R.string.hours, toBePaidHours)
-            tvEarned.text = getString(R.string.money, earnedTotal)
-            tvEarnedInHours.text = getString(R.string.hours, earnedHours)
-
-            // Check for no shifts
-            if (shifts.isEmpty()) {
-                clNoShifts.visibility = View.VISIBLE
+        shifts.forEach() {
+            if (it.isPaid) {
+                earnedTotal += it.getSalary(job.hourlyWage)
+                earnedHours += it.getWorkedHours()
             } else {
-                clNoShifts.visibility = View.INVISIBLE
+                toBePaidTotal += it.getSalary(job.hourlyWage)
+                toBePaidHours += it.getWorkedHours()
             }
+        }
+
+        tvToBePaid.text = getString(R.string.money, toBePaidTotal)
+        tvToBePaidInHours.text = getString(R.string.hours, toBePaidHours)
+        tvEarned.text = getString(R.string.money, earnedTotal)
+        tvEarnedInHours.text = getString(R.string.hours, earnedHours)
+
+        // Check for no shifts
+        if (shifts.isEmpty()) {
+            clNoShifts.visibility = View.VISIBLE
+        } else {
+            clNoShifts.visibility = View.INVISIBLE
         }
     }
 
@@ -259,9 +269,9 @@ class ShiftActivity : AppCompatActivity() {
 
             val shift = Shift(startDate, endDate, false, job.id!!.toLong())
             withContext(Dispatchers.IO) {
-                shiftRepository.insertShift(shift)
+                updateViewModelShift(shift)
+                shiftActivityViewModel.insertShift()
             }
-            getShiftsFromDatabase()
             dialog.cancel()
         }
     }
@@ -273,9 +283,9 @@ class ShiftActivity : AppCompatActivity() {
             mainScope.launch {
                 withContext(Dispatchers.IO) {
                     clickedShift.isPaid = true
-                    shiftRepository.updateShift(clickedShift)
+                    updateViewModelShift(clickedShift)
+                    shiftActivityViewModel.updateShift()
                 }
-                getShiftsFromDatabase()
             }
         }
     }
@@ -293,9 +303,9 @@ class ShiftActivity : AppCompatActivity() {
             mainScope.launch {
                 withContext(Dispatchers.IO) {
                     clickedShift.isPaid = false
-                    shiftRepository.updateShift(clickedShift)
+                    updateViewModelShift(clickedShift)
+                    shiftActivityViewModel.updateShift()
                 }
-                getShiftsFromDatabase()
             }
             dialog.cancel()
         }
