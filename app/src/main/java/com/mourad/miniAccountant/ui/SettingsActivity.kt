@@ -22,6 +22,7 @@ class SettingsActivity : AppCompatActivity() {
     lateinit var job: Job
     lateinit var jobViewModel: JobViewModel
     var unicode: Int = 0x1F4B0
+    var unicodeWink: Int = 0x1F609
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,7 +40,7 @@ class SettingsActivity : AppCompatActivity() {
         etTitle.setText(job.name)
         etHourlyWage.setText(job.hourlyWage.toString())
         btnDeleteJob.setText(getString(R.string.settings_text_delete_job, job.name))
-        credits.setText(getString(R.string.credits, getEmojiByUnicode(unicode), getEmojiByUnicode(unicode)))
+        credits.setText(getString(R.string.credits, getEmojiByUnicode(unicode), getEmojiByUnicode(unicode), getEmojiByUnicode(unicodeWink)))
 
         // Set the onClickListeners
         tvClose.setOnClickListener { finish() }
