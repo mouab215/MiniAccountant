@@ -1,5 +1,6 @@
 package com.mourad.miniAccountant.ui
 
+import android.app.Activity
 import android.app.Dialog
 import android.content.Intent
 import android.graphics.Color
@@ -15,6 +16,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.mourad.miniAccountant.R
 import com.mourad.miniAccountant.model.Job
 import com.mourad.miniAccountant.model.Shift
+import com.mourad.miniAccountant.ui.SettingsActivity.Companion.JOB_SETTINGS
+import com.mourad.miniAccountant.ui.SettingsActivity.Companion.JOB_SETTINGS_SAVED
+import com.mourad.miniAccountant.viewmodel.JobViewModel
 import com.mourad.miniAccountant.viewmodel.MyViewModelFactory
 import com.mourad.miniAccountant.viewmodel.ShiftViewModel
 
@@ -31,11 +35,16 @@ import kotlinx.coroutines.withContext
 import java.text.SimpleDateFormat
 import java.util.Calendar
 
-const val JOB_EXTRA = "JOB_EXTRA"
 class ShiftActivity : AppCompatActivity() {
+
+    companion object {
+        const val JOB_EXTRA = "JOB_EXTRA"
+        const val SETTINGS_REQUEST_CODE = 9001
+    }
 
     private lateinit var job: Job
     private lateinit var shiftViewModel: ShiftViewModel
+    private lateinit var jobViewModel: JobViewModel
     private lateinit var shiftAdapter: ShiftAdapter
     private val mainScope = CoroutineScope(Dispatchers.Main)
     private var shifts = arrayListOf<Shift>()
@@ -68,6 +77,7 @@ class ShiftActivity : AppCompatActivity() {
 
     private fun initViewModels() {
         shiftViewModel = ViewModelProviders.of(this, MyViewModelFactory(job, application)).get(ShiftViewModel::class.java)
+        jobViewModel = ViewModelProviders.of(this).get(JobViewModel::class.java)
 
         shiftViewModel.shifts.observe(this, Observer { shifts ->
             this@ShiftActivity.shifts.clear()
@@ -77,16 +87,25 @@ class ShiftActivity : AppCompatActivity() {
         })
     }
 
-    private fun updateViewModelShift(shift: Shift) {
-        mainScope.launch {
-            shiftViewModel.shift.value = shift
-        }
-    }
 
     fun onSettingsClicked() {
         val intent = Intent(this, SettingsActivity::class.java)
         intent.putExtra(JOB_SETTINGS, job)
-        startActivity(intent)
+        startActivityForResult(intent, SETTINGS_REQUEST_CODE)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (requestCode == SETTINGS_REQUEST_CODE) {
+            if (resultCode == Activity.RESULT_OK) {
+                job = data!!.getParcelableExtra(JOB_SETTINGS_SAVED)
+
+                jobViewModel.updateViewModelJobById(job.id!!)
+                initViews()
+                initViewModels()
+            }
+         }
     }
 
     private fun buildDialogAddShiftDate() {
@@ -184,8 +203,7 @@ class ShiftActivity : AppCompatActivity() {
         dialog.btnDelete.setOnClickListener {
             CoroutineScope(Dispatchers.Main).launch {
                 withContext(Dispatchers.IO) {
-                    updateViewModelShift(shiftToDelete)
-                    shiftViewModel.deleteShift()
+                    shiftViewModel.updateViewModelShift(shiftToDelete).deleteShift()
                 }
             }
             dialog.cancel()
@@ -269,8 +287,7 @@ class ShiftActivity : AppCompatActivity() {
 
             val shift = Shift(startDate, endDate, false, job.id!!.toLong())
             withContext(Dispatchers.IO) {
-                updateViewModelShift(shift)
-                shiftViewModel.insertShift()
+                shiftViewModel.updateViewModelShift(shift).insertShift()
             }
             dialog.cancel()
         }
@@ -283,8 +300,7 @@ class ShiftActivity : AppCompatActivity() {
             mainScope.launch {
                 withContext(Dispatchers.IO) {
                     clickedShift.isPaid = true
-                    updateViewModelShift(clickedShift)
-                    shiftViewModel.updateShift()
+                    shiftViewModel.updateViewModelShift(clickedShift).updateShift()
                 }
             }
         }
@@ -303,8 +319,7 @@ class ShiftActivity : AppCompatActivity() {
             mainScope.launch {
                 withContext(Dispatchers.IO) {
                     clickedShift.isPaid = false
-                    updateViewModelShift(clickedShift)
-                    shiftViewModel.updateShift()
+                    shiftViewModel.updateViewModelShift(clickedShift).updateShift()
                 }
             }
             dialog.cancel()

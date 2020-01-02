@@ -1,6 +1,7 @@
 package com.mourad.miniAccountant.viewmodel
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import com.mourad.miniAccountant.model.Job
@@ -26,6 +27,28 @@ class JobViewModel(application: Application) : AndroidViewModel(application) {
             }
         }
     }
+
+    fun updateJob() {
+        mainScope.launch {
+            withContext(Dispatchers.IO) {
+                jobRepository.updateJob(job.value!!)
+            }
+        }
+    }
+
+    fun updateViewModelJobById(id: Long): JobViewModel {
+        mainScope.launch {
+            this@JobViewModel.job.value = jobRepository.getJob(id).value
+        }
+        return this
+    }
+
+    fun updateViewModelJob(job: Job): JobViewModel {
+        mainScope.launch {
+            this@JobViewModel.job.value = job
+        }
+        return this
+    }
 //    fun deleteShift() {
 //        mainScope.launch {
 //            withContext(Dispatchers.IO) {
@@ -34,13 +57,6 @@ class JobViewModel(application: Application) : AndroidViewModel(application) {
 //        }
 //    }
 //
-//    fun updateShift() {
-//        mainScope.launch {
-//            withContext(Dispatchers.IO) {
-//                shiftRepository.updateShift(shift.value!!)
-//            }
-//        }
-//    }
 //
 //
 //    fun deleteAllGames() {

@@ -20,6 +20,11 @@
     <color name="buttonAgreePressedPrimary">#808080</color>
     <color name="buttonAgreePressedSecondary">#a6a6a6</color>
 
+    <color name="buttonSavePrimary">#33ff33</color>
+    <color name="buttonSaveSecondary">#33cc00</color>
+    <color name="buttonSavePressedPrimary">#66ff66</color>
+    <color name="buttonSavePressedSecondary">#40ff00</color>
+
     <color name="buttonCancelPrimary">#ff1a1a</color>
     <color name="buttonCancelSecondary">#ff3333</color>
     <color name="buttonCancelPressedPrimary">#ff4d4d</color>

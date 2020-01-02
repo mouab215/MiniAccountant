@@ -25,6 +25,23 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
+        android:id="@+id/tvSubTitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="32dp"
+        android:ellipsize="end"
+        android:fontFamily="@font/helvetica_neue_med"
+        android:maxLines="1"
+        android:text="@string/settings_title"
+        android:textColor="@color/colorPrimary"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@+id/tvTitle"
+        app:layout_constraintStart_toStartOf="@+id/tvTitle"
+        app:layout_constraintTop_toBottomOf="@+id/tvTitle" />
+
+    <TextView
         android:id="@+id/tvClose"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -54,7 +71,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="48dp"
+        android:layout_marginTop="72dp"
         android:layout_marginEnd="16dp"
         android:background="@drawable/rectangle_color_light_grey_rounded"
         android:padding="16dp"
@@ -128,6 +145,27 @@
             android:textStyle="bold"
             app:layout_constraintBottom_toTopOf="@+id/etTitle"
             app:layout_constraintStart_toStartOf="@+id/etTitle" />
+
+        <Button
+            android:id="@+id/btnSaveChanges"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/button_custom_rounded_green"
+            android:drawableEnd="@drawable/logo_confirm_drawable"
+            android:enabled="false"
+            android:fontFamily="@font/helvetica_neue_med"
+            android:paddingStart="34dp"
+            android:paddingEnd="10dp"
+            android:text="@string/settings_text_save_job"
+            android:textAlignment="center"
+            android:textAllCaps="false"
+            android:textColor="@android:color/white"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/etHourlyWage" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <TextView
@@ -161,7 +199,10 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:background="@drawable/button_custom_anisa_rounded"
+            android:drawableEnd="@drawable/logo_delete_drawable"
             android:fontFamily="@font/helvetica_neue_med"
+            android:paddingStart="34dp"
+            android:paddingEnd="10dp"
             android:text="@string/settings_text_delete_job"
             android:textAllCaps="false"
             android:textColor="@android:color/white"
@@ -174,8 +215,8 @@
             android:id="@+id/textView25"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginBottom="4dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginBottom="8dp"
             android:fontFamily="@font/helvetica_neue_lt"
             android:text="@string/settings_top_text_delete_job"
             android:textColor="@android:color/black"

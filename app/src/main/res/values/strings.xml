@@ -1,18 +1,20 @@
 <resources>
     <string name="app_name">Stack it!</string>
-    <string name="credits">Made by Mourad Abouhcen\nwhile making mucho\n %s %s dinero</string>
+    <string name="credits">Made by Mourad Abouhcen\nfor counting mucho\n %s %s dinero</string>
 
     <string name="main_to_be_payed">To be paid</string>
     <string name="main_earned">Earned</string>
 
+    <!--JobsActivity Strings-->
+    <string name="title_activity_jobs">JobsActivity</string>
     <string name="jobs_title">Jobs</string>
-
     <string name="jobs_dialog_title">Add a new Job</string>
     <string name="jobs_dialog_subtitle_1">What is your new job called?</string>
     <string name="jobs_dialog_hint_1">Job title</string>
     <string name="jobs_dialog_subtitle_2">What is your hourly wage?</string>
     <string name="jobs_dialog_hint_2">Hourly wage</string>
 
+    <!--ShiftsActivity Strings-->
     <string name="dialog_title">Add a new Shift</string>
     <string name="dialog_date">On what date did you work?</string>
     <string name="dialog_start_time">At what time did you start?</string>
@@ -44,7 +46,6 @@
     <string name="money">€ %.2f</string>
     <string name="euro_sign">€</string>
     <string name="hours">(%.2f hours)</string>
-    <string name="title_activity_jobs">JobsActivity</string>
 
     <!--SettingsActivity Strings-->
     <string name="settings_title">Settings</string>
@@ -52,6 +53,7 @@
     <string name="settings_tab_danger_zone">Danger zone</string>
     <string name="settings_top_text_delete_job">Delete this Job?</string>
     <string name="settings_text_delete_job">Delete %s</string>
+    <string name="settings_text_save_job">Apply changes!</string>
 
     <!--FontAwesome5 Strings-->
     <!--remove from 'x' till ';' -->

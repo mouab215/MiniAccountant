@@ -43,6 +43,14 @@ class ShiftViewModel(application: Application, job: Job) : AndroidViewModel(appl
             }
         }
     }
+
+    fun updateViewModelShift(shift: Shift): ShiftViewModel {
+        mainScope.launch {
+            this@ShiftViewModel.shift.value = shift
+        }
+
+        return this
+    }
 //
 //    fun deleteAllGames() {
 //        mainScope.launch {

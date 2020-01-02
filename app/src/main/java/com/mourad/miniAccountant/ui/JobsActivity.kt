@@ -17,18 +17,14 @@ import com.mourad.miniAccountant.R
 
 import kotlinx.android.synthetic.main.activity_jobs.*
 import kotlinx.android.synthetic.main.content_jobs.*
-import kotlinx.android.synthetic.main.content_shift.*
 import kotlinx.android.synthetic.main.dialog_add_job.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import com.mourad.miniAccountant.model.Job
+import com.mourad.miniAccountant.ui.ShiftActivity.Companion.JOB_EXTRA
 import com.mourad.miniAccountant.viewmodel.JobViewModel
 
 class JobsActivity : AppCompatActivity() {
 
     private lateinit var jobViewModel: JobViewModel
-    private val mainScope = CoroutineScope(Dispatchers.Main)
     private var jobs = arrayListOf<Job>()
     private var jobAdapter = JobAdapter(jobs) { clickedJob: Job -> onJobClicked(clickedJob) }
 
@@ -117,14 +113,7 @@ class JobsActivity : AppCompatActivity() {
     }
 
     private fun addJob(job: Job) {
-        updateViewModelJob(job)
-        jobViewModel.insertJob()
-    }
-
-    private fun updateViewModelJob(job: Job) {
-        mainScope.launch {
-            jobViewModel.job.value = job
-        }
+        jobViewModel.updateViewModelJob(job).insertJob()
     }
 
 }
