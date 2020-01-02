@@ -7,6 +7,6 @@ import com.mourad.miniAccountant.model.Job
 
 class MyViewModelFactory(private val job: Job, private val application: Application): ViewModelProvider.NewInstanceFactory() {
     override fun <T: ViewModel> create(modelClass:Class<T>): T {
-        return ShiftActivityViewModel(application, job) as T
+        return ShiftViewModel(application, job) as T
     }
 }

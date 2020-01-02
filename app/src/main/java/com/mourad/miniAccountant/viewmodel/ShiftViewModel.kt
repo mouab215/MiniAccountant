@@ -11,7 +11,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class ShiftActivityViewModel(application: Application, job: Job) : AndroidViewModel(application) {
+class ShiftViewModel(application: Application, job: Job) : AndroidViewModel(application) {
 
 
     private val shiftRepository = ShiftRepository(application.applicationContext)

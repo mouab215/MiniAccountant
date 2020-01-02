@@ -7,12 +7,13 @@ import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.mourad.miniAccountant.R
-import com.mourad.miniAccountant.repository.JobRepository
 
 import kotlinx.android.synthetic.main.activity_jobs.*
 import kotlinx.android.synthetic.main.content_jobs.*
@@ -21,13 +22,13 @@ import kotlinx.android.synthetic.main.dialog_add_job.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import com.mourad.miniAccountant.model.Job
+import com.mourad.miniAccountant.viewmodel.JobViewModel
 
 class JobsActivity : AppCompatActivity() {
 
+    private lateinit var jobViewModel: JobViewModel
     private val mainScope = CoroutineScope(Dispatchers.Main)
-    private lateinit var jobRepository: JobRepository
     private var jobs = arrayListOf<Job>()
     private var jobAdapter = JobAdapter(jobs) { clickedJob: Job -> onJobClicked(clickedJob) }
 
@@ -35,28 +36,26 @@ class JobsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_jobs)
 
-        jobRepository = JobRepository(this)
         initViews()
+        initViewModels()
     }
 
     private fun initViews() {
         rvJobs.layoutManager = StaggeredGridLayoutManager(2, LinearLayoutManager.VERTICAL)
         rvJobs.adapter = jobAdapter
-        createItemTouchHelper().attachToRecyclerView(rvShifts)
-        getJobsFromDatabase()
+        createItemTouchHelper().attachToRecyclerView(rvJobs)
 
         fabAddJob.setOnClickListener { buildDialogAddJobDate() }
     }
 
-    private fun getJobsFromDatabase() {
-        mainScope.launch {
-            val shifts = withContext(Dispatchers.IO) {
-                jobRepository.getAllJobs().sortedBy { it.name }
-            }
+    private fun initViewModels() {
+        jobViewModel = ViewModelProviders.of(this).get(JobViewModel::class.java)
+
+        jobViewModel.jobs.observe(this, Observer { jobs ->
             this@JobsActivity.jobs.clear()
-            this@JobsActivity.jobs.addAll(shifts)
-            this@JobsActivity.jobAdapter.notifyDataSetChanged()
-        }
+            this@JobsActivity.jobs.addAll(jobs)
+            jobAdapter.notifyDataSetChanged()
+        })
     }
 
     fun onJobClicked(clickedJob: Job) {
@@ -118,11 +117,13 @@ class JobsActivity : AppCompatActivity() {
     }
 
     private fun addJob(job: Job) {
+        updateViewModelJob(job)
+        jobViewModel.insertJob()
+    }
+
+    private fun updateViewModelJob(job: Job) {
         mainScope.launch {
-            withContext(Dispatchers.IO) {
-                jobRepository.insertJob(job)
-            }
-            getJobsFromDatabase()
+            jobViewModel.job.value = job
         }
     }
 

@@ -16,7 +16,7 @@ import com.mourad.miniAccountant.R
 import com.mourad.miniAccountant.model.Job
 import com.mourad.miniAccountant.model.Shift
 import com.mourad.miniAccountant.viewmodel.MyViewModelFactory
-import com.mourad.miniAccountant.viewmodel.ShiftActivityViewModel
+import com.mourad.miniAccountant.viewmodel.ShiftViewModel
 
 import kotlinx.android.synthetic.main.activity_shift.*
 import kotlinx.android.synthetic.main.content_shift.*
@@ -34,11 +34,11 @@ import java.util.Calendar
 const val JOB_EXTRA = "JOB_EXTRA"
 class ShiftActivity : AppCompatActivity() {
 
-    private val mainScope = CoroutineScope(Dispatchers.Main)
     private lateinit var job: Job
-    private lateinit var shiftActivityViewModel: ShiftActivityViewModel
+    private lateinit var shiftViewModel: ShiftViewModel
+    private lateinit var shiftAdapter: ShiftAdapter
+    private val mainScope = CoroutineScope(Dispatchers.Main)
     private var shifts = arrayListOf<Shift>()
-    private var shiftAdapter = ShiftAdapter(shifts) { clickedShift: Shift -> onShiftClicked(clickedShift) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,7 +47,7 @@ class ShiftActivity : AppCompatActivity() {
         job = intent.getParcelableExtra(JOB_EXTRA)
 
         initViews()
-        initViewModel()
+        initViewModels()
     }
 
     fun initViews() {
@@ -55,6 +55,7 @@ class ShiftActivity : AppCompatActivity() {
         tvTitle.text = job.name
 
         // Initialize the recyclerView
+        shiftAdapter = ShiftAdapter(shifts, job) { clickedShift: Shift -> onShiftClicked(clickedShift) }
         rvShifts.layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
         rvShifts.adapter = shiftAdapter
         createItemTouchHelper().attachToRecyclerView(rvShifts)
@@ -65,13 +66,12 @@ class ShiftActivity : AppCompatActivity() {
         tvSettingsClick.setOnClickListener { onSettingsClicked() }
     }
 
-    private fun initViewModel() {
-        shiftActivityViewModel = ViewModelProviders.of(this, MyViewModelFactory(job, application)).get(ShiftActivityViewModel::class.java)
+    private fun initViewModels() {
+        shiftViewModel = ViewModelProviders.of(this, MyViewModelFactory(job, application)).get(ShiftViewModel::class.java)
 
-        shiftActivityViewModel.shifts.observe(this, Observer { shifts ->
+        shiftViewModel.shifts.observe(this, Observer { shifts ->
             this@ShiftActivity.shifts.clear()
             this@ShiftActivity.shifts.addAll(shifts)
-//            this@ShiftActivity.shifts.sortedByDescending { it.startDateTime }
             shiftAdapter.notifyDataSetChanged()
             checkShifts()
         })
@@ -79,7 +79,7 @@ class ShiftActivity : AppCompatActivity() {
 
     private fun updateViewModelShift(shift: Shift) {
         mainScope.launch {
-            shiftActivityViewModel.shift.value = shift
+            shiftViewModel.shift.value = shift
         }
     }
 
@@ -185,7 +185,7 @@ class ShiftActivity : AppCompatActivity() {
             CoroutineScope(Dispatchers.Main).launch {
                 withContext(Dispatchers.IO) {
                     updateViewModelShift(shiftToDelete)
-                    shiftActivityViewModel.deleteShift()
+                    shiftViewModel.deleteShift()
                 }
             }
             dialog.cancel()
@@ -270,7 +270,7 @@ class ShiftActivity : AppCompatActivity() {
             val shift = Shift(startDate, endDate, false, job.id!!.toLong())
             withContext(Dispatchers.IO) {
                 updateViewModelShift(shift)
-                shiftActivityViewModel.insertShift()
+                shiftViewModel.insertShift()
             }
             dialog.cancel()
         }
@@ -284,7 +284,7 @@ class ShiftActivity : AppCompatActivity() {
                 withContext(Dispatchers.IO) {
                     clickedShift.isPaid = true
                     updateViewModelShift(clickedShift)
-                    shiftActivityViewModel.updateShift()
+                    shiftViewModel.updateShift()
                 }
             }
         }
@@ -304,7 +304,7 @@ class ShiftActivity : AppCompatActivity() {
                 withContext(Dispatchers.IO) {
                     clickedShift.isPaid = false
                     updateViewModelShift(clickedShift)
-                    shiftActivityViewModel.updateShift()
+                    shiftViewModel.updateShift()
                 }
             }
             dialog.cancel()
