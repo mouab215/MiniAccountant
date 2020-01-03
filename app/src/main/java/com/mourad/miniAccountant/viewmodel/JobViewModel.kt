@@ -36,6 +36,14 @@ class JobViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
+    fun deleteJob() {
+        mainScope.launch {
+            withContext(Dispatchers.IO) {
+                jobRepository.deleteJob(job.value!!)
+            }
+        }
+    }
+
     fun updateViewModelJobById(id: Long): JobViewModel {
         mainScope.launch {
             this@JobViewModel.job.value = jobRepository.getJob(id).value
@@ -49,22 +57,5 @@ class JobViewModel(application: Application) : AndroidViewModel(application) {
         }
         return this
     }
-//    fun deleteShift() {
-//        mainScope.launch {
-//            withContext(Dispatchers.IO) {
-//                shiftRepository.deleteShift(shift.value!!)
-//            }
-//        }
-//    }
-//
-//
-//
-//    fun deleteAllGames() {
-//        mainScope.launch {
-//            withContext(Dispatchers.IO) {
-//                gameRepository.deleteAllGames()
-//            }
-//        }
-//    }
 
 }

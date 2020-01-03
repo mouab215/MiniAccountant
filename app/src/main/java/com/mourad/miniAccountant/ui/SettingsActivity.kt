@@ -1,7 +1,10 @@
 package com.mourad.miniAccountant.ui
 
 import android.app.Activity
+import android.app.Dialog
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.addTextChangedListener
@@ -10,6 +13,7 @@ import com.mourad.miniAccountant.R
 import com.mourad.miniAccountant.model.Job
 import com.mourad.miniAccountant.viewmodel.JobViewModel
 import kotlinx.android.synthetic.main.activity_settings.*
+import kotlinx.android.synthetic.main.dialog_delete_job.*
 
 
 class SettingsActivity : AppCompatActivity() {
@@ -55,6 +59,7 @@ class SettingsActivity : AppCompatActivity() {
                 tvSubTitle.setText(job.name)
             }
         }
+        btnDeleteJob.setOnClickListener { buildDialogDeleteJob() }
 
         etTitle.addTextChangedListener {
             btnSaveChanges.isEnabled = isSettingsChanged()
@@ -71,6 +76,36 @@ class SettingsActivity : AppCompatActivity() {
     private fun isSettingsChanged(): Boolean {
         if ((etHourlyWage.text.toString() == job.hourlyWage.toString()) && (etTitle.text.toString() == job.name)) return false
         return true
+    }
+
+    private fun buildDialogDeleteJob() {
+        var dialog = Dialog(this@SettingsActivity)
+        dialog.setContentView(R.layout.dialog_delete_job)
+        dialog.window.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        dialog.tvQuestion.text = getString(R.string.dialog_delete_job_title, job.name)
+        dialog.tvPrompt.text = getString(R.string.dialog_delete_job_prompt, job.name)
+        dialog.etPrompt.hint = job.name
+
+        dialog.btnCancel.setOnClickListener {
+            dialog.cancel()
+        }
+
+        dialog.btnDelete.setOnClickListener {
+            // todo hier deleten
+            dialog.cancel()
+
+            jobViewModel.updateViewModelJob(job).deleteJob()
+
+            val i = Intent(applicationContext, JobsActivity::class.java)        // Specify any activity here e.g. home or splash or login etc
+            i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+            i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+            i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            i.putExtra("EXIT", true)
+            startActivity(i)
+            finish()
+        }
+
+        dialog.show()
     }
 
     private fun getEmojiByUnicode(unicode: Int): String? {

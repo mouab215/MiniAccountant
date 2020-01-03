@@ -55,6 +55,11 @@
     <string name="settings_text_delete_job">Delete %s</string>
     <string name="settings_text_save_job">Apply changes!</string>
 
+    <string name="dialog_delete_job_title">Are you sure you want to delete\nthe job \"%s\"\nand all its shifts?</string>
+    <string name="dialog_delete_job_prompt">Please type \"%s\" to confirm</string>
+    <string name="dialog_delete_job_btn">Delete this Job</string>
+    <string name="dialog_cancel_delete_job_btn">Cancel</string>
+
     <!--FontAwesome5 Strings-->
     <!--remove from 'x' till ';' -->
     <string name="fa_slider">&#xf1de;</string>
@@ -62,4 +67,5 @@
     <string name="fa_close">&#xf00d;</string>
     <string name="fa_question_mark">&#xf059;</string>
     <string name="fa_edit">&#xf044;</string>
+    <string name="fa_exclamation_mark">&#xf071;</string>
 </resources>

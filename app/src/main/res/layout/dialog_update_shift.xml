@@ -42,7 +42,7 @@
             android:background="@drawable/button_custom_anisa_rounded"
             android:drawableRight="@drawable/logo_cancel_drawable"
             android:fontFamily="@font/roboto_light"
-            android:paddingEnd="5dp"
+            android:paddingEnd="3dp"
             android:text="@string/dialog_delete_no"
             android:textAllCaps="false"
             android:textColor="@android:color/white"

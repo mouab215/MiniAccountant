@@ -3,12 +3,20 @@
 
     <item
         android:state_pressed="true"
+        android:state_enabled="true"
         android:drawable="@drawable/button_pressed_red_rounded"
         />
 
     <item
         android:state_pressed="false"
+        android:state_enabled="true"
         android:drawable="@drawable/button_default_red_rounded"
+        />
+
+    <item
+        android:state_pressed="false"
+        android:state_enabled="false"
+        android:drawable="@drawable/button_disabled_rounded_all"
         />
 
 
