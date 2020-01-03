@@ -6,6 +6,7 @@ import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.text.TextUtils
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.ViewModelProviders
@@ -90,8 +91,13 @@ class SettingsActivity : AppCompatActivity() {
             dialog.cancel()
         }
 
+        dialog.etPrompt.addTextChangedListener {
+            if (!dialog.etPrompt.text.toString().isEmpty()) {
+                dialog.btnDelete.isEnabled = dialog.etPrompt.text?.toString() == job.name
+            }
+        }
+
         dialog.btnDelete.setOnClickListener {
-            // todo hier deleten
             dialog.cancel()
 
             jobViewModel.updateViewModelJob(job).deleteJob()
