@@ -68,4 +68,7 @@
     <string name="fa_question_mark">&#xf059;</string>
     <string name="fa_edit">&#xf044;</string>
     <string name="fa_exclamation_mark">&#xf071;</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

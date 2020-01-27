@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/navigation_graph"
+    app:startDestination="@id/shiftFragment">
+
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="com.mourad.miniAccountant.fragment.SettingsFragment"
+        android:label="SettingsFragment"
+        tools:layout="@layout/fragment_settings" >
+        <action
+            android:id="@+id/action_settingsFragment_to_shiftFragment"
+            app:destination="@id/shiftFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/shiftFragment"
+        android:name="com.mourad.miniAccountant.fragment.ShiftFragment"
+        android:label="ShiftFragment"
+        tools:layout="@layout/fragment_shift" >
+        <action
+            android:id="@+id/action_shiftFragment_to_settingsFragment"
+            app:destination="@id/settingsFragment" />
+    </fragment>
+</navigation>
